@@ -1,75 +1,116 @@
-let humanScore = 0;
+let playerScore = 0;
 let computerScore = 0;
-let play = true;
-let computerChoice, humanChoice;
+let computerChoice, playerChoice;
+document.getElementById("pScore").textContent = playerScore;
+document.getElementById("cScore").textContent = computerScore;
 let round = 1;
+let gameEnd = document.getElementById("gameEnd");
 
-//while user wants to play
-while(play){
-    //print the round #
-    console.log("Round: " + round);
 
-    //play round
-    playRound(computerChoice, humanChoice);
 
-    //prompt user if they want to keep playing
-    play = 1 == prompt("Enter 1 for next round, 2 to end the game: ");
-    round++;
-}
+document.getElementById("playRound").addEventListener("click", () =>{
+    getComputerChoice();
+});
 
-//print who won game or draw
-gameEnd(computerScore, humanScore);
-
+document.getElementById("endGame").addEventListener("click", () =>{
+    endGame();
+});
 
 function getComputerChoice(){
-    const choice = Math.random();
+    gameEnd.style.display = "none";
+    beat.textContent = "";
+    document.getElementById("pChoice").style.display = "none";
+    document.getElementById("cChoice").style.display = "none";
+    document.getElementById("round").textContent = round;
+    document.getElementById("choices").style.display = "flex";
+    document.getElementById("buttons").style.display = "none";
 
-    if(choice > .66) return "Rock";
-    else if(choice > .33) return "Scissors";
-    else return "Paper";
+    //get computer choice
+    let choice = Math.random();    
+    if(choice > .66) computerChoice = "Rock";
+    else if(choice > .33) computerChoice = "Scissors";
+    else computerChoice = "Paper";
 }
 
-function getHumanChoice(){
-    const choice = prompt("Enter 1 for rock, 2 for scissors, 3 for paper");
+document.getElementById("rock").addEventListener("click", ()=>{
+    playerChoice = "Rock";
+    getPlayerChoice();
+});
 
-    if(choice == 1) return "Rock";
-    else if(choice == 2) return "Scissors";
-    else return "Paper";
-}
+document.getElementById("paper").addEventListener("click", ()=>{
+    playerChoice = "Paper";
+    getPlayerChoice();
+});
 
-function playRound(){
-    //get computer/player choices
-    let c = getComputerChoice();
-    let h = getHumanChoice();
+document.getElementById("scissors").addEventListener("click", ()=>{
+    playerChoice = "Scissors";
+    getPlayerChoice();
+});
 
+
+function endGame(){
+    gameEnd.style.display = "block";
+    let outcome;
+
+    if(computerScore > playerScore) outcome = "Computer Win!";
+    else if(computerScore < playerScore) outcome = "Player Win";
+    else outcome = "Draw!";
+
+    gameEnd.textContent =  "Game Ended. " + outcome + "(" + computerScore + " - " + playerScore + ")";
+
+    beat.textContent = "";
+    document.getElementById("pChoice").style.display = "none";
+    document.getElementById("cChoice").style.display = "none";
+    round = 1;
+    document.getElementById("round").textContent = "";
+    document.getElementById("choices").style.display = "none";
+    playerScore = 0;
+    computerScore = 0;
+    document.getElementById("cScore").textContent = computerScore;
+    document.getElementById("pScore").textContent = playerScore;
+};
+
+function getPlayerChoice(){
+    let c = computerChoice;
+    let p = playerChoice
     //used to print who wins after comparisons
     let cScore = computerScore;
-    let hScore = humanScore;
-``
+    let pScore = playerScore;
+
+    let cImage = document.getElementById("cChoice");
+    let pImage = document.getElementById("pChoice");
+    let beat = document.getElementById("beat");
+
     //comparisons to see who wins round
     if(c == "Rock"){
-        if(h == "Scissors") computerScore++;
-        if(h == "Paper") humanScore++;
+        cImage.src = "images/rock.jpg";
+        if(p == "Scissors") computerScore++;
+        if(p == "Paper") playerScore++;
     }else if (c == "Scissors"){
-        if(h == "Paper") computerScore++;
-        if(h == "Rock") humanScore++;
+        cImage.src = "images/scissors.png"
+        if(p == "Paper") computerScore++;
+        if(p == "Rock") playerScore++;
     }else{
-        if(h == "Scissors") computerScore++;
-        if(h == "Rock") humanScore++;
+        cImage.src = "images/paper.png"
+        if(p == "Rock") computerScore++;
+        if(p == "Scissors") playerScore++;
     }
 
-    //print who won or draw
-    console.log("Computer Choice: " + c + ", Player Choice: " + h);
-    if(computerScore > cScore) console.log("Computer Win");
-    else if (humanScore > hScore) console.log("Player Win");
-    else console.log("Draw");
+    if(p == "Rock") pImage.src = "images/rock.jpg";
+    else if (p == "Scissors") pImage.src = "images/scissors.png";
+    else pImage.src = "images/paper.png";
 
-    console.log("Computer Score: " + computerScore + ", Player Score: " + humanScore);
-}
+    pImage.style.display = "block";
+    cImage.style.display = "block";
 
-function gameEnd(cScore, hScore){
-    if(cScore > hScore) console.log("Computer Wins! GG");
-    else if(cScore < hScore) console.log("Player Wins! GG");
-    else console.log("Draw! GG");
+    if (cScore < computerScore) beat.textContent = ">";
+    else if (pScore < playerScore) beat.textContent = "<";
+    else beat.textContent = "=";
 
+
+    document.getElementById("buttons").style.display = "flex";
+    document.getElementById("choices").style.display = "none";
+    document.getElementById("cScore").textContent = computerScore;
+    document.getElementById("pScore").textContent = playerScore;
+    round++;
 }
