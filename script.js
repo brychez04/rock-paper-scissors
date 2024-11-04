@@ -21,7 +21,7 @@ function getComputerChoice(){
     beat.textContent = "";
     document.getElementById("pChoice").style.display = "none";
     document.getElementById("cChoice").style.display = "none";
-    document.getElementById("round").textContent = round;
+    document.getElementById("round").textContent = "Round " + round;
     document.getElementById("choices").style.display = "flex";
     document.getElementById("buttons").style.display = "none";
 
